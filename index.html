@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Space-Y</title>
+    <style>
+        /* 🌌 Fond étoilé animé */
+        body {
+            margin: 0;
+            height: 100vh;
+            background: black;
+            overflow: hidden;
+            font-family: 'Arial', sans-serif;
+            color: white;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+        }
+
+        h1 {
+            font-size: 3em;
+            margin-bottom: 0.2em;
+            color: #00ffea;
+            text-shadow: 0 0 10px #00ffea, 0 0 20px #00ffea;
+        }
+
+        p {
+            font-size: 1.2em;
+            color: #ffffffcc;
+        }
+
+        /* 🌠 Animation étoiles */
+        .star {
+            position: absolute;
+            width: 2px;
+            height: 2px;
+            background: white;
+            border-radius: 50%;
+            animation: twinkle 2s infinite;
+        }
+
+        @keyframes twinkle {
+            0%, 100% { opacity: 0.2; }
+            50% { opacity: 1; }
+        }
+    </style>
+</head>
+<body>
+    <h1>Bienvenue sur Space-Y 🚀</h1>
+    <p>Un voyage à travers les étoiles et l’espace infini</p>
+
+    <!-- 🌟 Génération des étoiles -->
+    <script>
+        const starsCount = 100;
+        for(let i = 0; i < starsCount; i++) {
+            let star = document.createElement('div');
+            star.classList.add('star');
+            star.style.top = Math.random() * window.innerHeight + 'px';
+            star.style.left = Math.random() * window.innerWidth + 'px';
+            star.style.width = Math.random() * 2 + 1 + 'px';
+            star.style.height = star.style.width;
+            star.style.animationDuration = (Math.random() * 3 + 1) + 's';
+            document.body.appendChild(star);
+        }
+    </script>
+</body>
+</html>
