@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <title>Space-Y | Exploration Digitale</title>
+  <meta name="description" content="Space-Y est un espace futuriste de création et d'exploration numérique.">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <!-- Google Font futuriste -->
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;600&display=swap" rel="stylesheet">
+
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Orbitron', sans-serif;
+      background: radial-gradient(circle at top, #0a2342, #000);
+      color: #ffffff;
+      height: 100vh;
+      overflow: hidden;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .stars {
+      position: fixed;
+      width: 100%;
+      height: 100%;
+      background: transparent url("https://www.transparenttextures.com/patterns/stardust.png") repeat;
+      animation: moveStars 60s linear infinite;
+      z-index: 0;
+    }
+
+    @keyframes moveStars {
+      from { background-position: 0 0; }
+      to { background-position: 10000px 5000px; }
+    }
+
+    .container {
+      position: relative;
+      z-index: 1;
+      text-align: center;
+      padding: 40px;
+      max-width: 600px;
+      background: rgba(0, 0, 0, 0.45);
+      border-radius: 20px;
+      box-shadow: 0 0 40px rgba(0, 140, 255, 0.3);
+      backdrop-filter: blur(6px);
+    }
+
+    h1 {
+      font-size: 3rem;
+      margin-bottom: 15px;
+      letter-spacing: 2px;
+    }
+
+    p {
+      opacity: 0.85;
+      font-size: 1.1rem;
+      line-height: 1.6;
+    }
+
+    a {
+      display: inline-block;
+      margin-top: 25px;
+      padding: 14px 32px;
+      border-radius: 30px;
+      text-decoration: none;
+      background: linear-gradient(135deg, #00c6ff, #0072ff);
+      color: white;
+      font-weight: 600;
+      box-shadow: 0 0 15px rgba(0, 114, 255, 0.6);
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+
+    a:hover {
+      transform: scale(1.05);
+      box-shadow: 0 0 25px rgba(0, 114, 255, 0.9);
+    }
+  </style>
+</head>
+<body>
+
+  <div class="stars"></div>
+
+  <div class="container">
+    <h1>🚀 Space-Y</h1>
+    <p>
+      Bienvenue dans Space-Y.<br>
+      Un espace futuriste dédié à la création, à l’exploration et à l’innovation numérique.
+    </p>
+    <a href="https://github.com/juslainmeye21-svg">Explorer</a>
+  </div>
+
+</body>
+    </html>
