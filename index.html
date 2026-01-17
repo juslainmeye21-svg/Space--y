@@ -1,17 +1,27 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Space-Y</title>
+    <meta name="description" content="Space-Y — un voyage à travers les étoiles et l'espace infini" />
     <style>
         /* 🌌 Fond étoilé animé */
+        :root {
+            --bg: #000000;
+            --accent: #00ffea;
+        }
+
+        html, body {
+            height: 100%;
+        }
+
         body {
             margin: 0;
-            height: 100vh;
-            background: black;
+            min-height: 100vh;
+            background: radial-gradient(ellipse at center, #000014 0%, var(--bg) 60%);
             overflow: hidden;
-            font-family: 'Arial', sans-serif;
+            font-family: "Arial", sans-serif;
             color: white;
             display: flex;
             flex-direction: column;
@@ -20,51 +30,141 @@
             text-align: center;
         }
 
+        main {
+            position: relative;
+            z-index: 2; /* au-dessus des étoiles */
+            padding: 2rem;
+        }
+
         h1 {
-            font-size: 3em;
+            font-size: clamp(2rem, 4vw, 3.5rem);
             margin-bottom: 0.2em;
-            color: #00ffea;
-            text-shadow: 0 0 10px #00ffea, 0 0 20px #00ffea;
+            color: var(--accent);
+            text-shadow: 0 0 10px var(--accent), 0 0 20px rgba(0,255,234,0.25);
         }
 
         p {
-            font-size: 1.2em;
+            font-size: clamp(1rem, 1.4vw, 1.2rem);
             color: #ffffffcc;
+            margin-top: 0;
         }
 
-        /* 🌠 Animation étoiles */
+        /* 🌠 Animation étoiles (les propriétés de durée/delay sont définies en ligne) */
         .star {
             position: absolute;
-            width: 2px;
+            width: 2px; /* valeur par défaut; remplacée en ligne */
             height: 2px;
-            background: white;
+            background: radial-gradient(circle at 30% 30%, #fff 0%, #ddd 40%, rgba(255,255,255,0) 80%);
             border-radius: 50%;
-            animation: twinkle 2s infinite;
+            pointer-events: none; /* ne pas intercepter les clics */
+            will-change: transform, opacity;
+            opacity: 0.25;
+            transform: translate3d(0,0,0);
+            animation-name: twinkle;
+            animation-iteration-count: infinite;
+            animation-timing-function: ease-in-out;
+            filter: drop-shadow(0 0 4px rgba(255,255,255,0.05));
         }
 
         @keyframes twinkle {
-            0%, 100% { opacity: 0.2; }
-            50% { opacity: 1; }
+            0%, 100% { opacity: 0.15; transform: scale(1); }
+            50%     { opacity: 1; transform: scale(1.15); }
+        }
+
+        /* Conteneur d'étoiles en dessous du contenu principal */
+        #stars-layer {
+            position: fixed;
+            inset: 0;
+            z-index: 1;
+            pointer-events: none;
+        }
+
+        /* petit message pour mobile si besoin */
+        @media (max-width: 480px) {
+            body { padding: 1rem; }
         }
     </style>
 </head>
 <body>
-    <h1>Bienvenue sur Space-Y 🚀</h1>
-    <p>Un voyage à travers les étoiles et l’espace infini</p>
+    <div id="stars-layer" aria-hidden="true"></div>
 
-    <!-- 🌟 Génération des étoiles -->
+    <main role="main" aria-labelledby="site-title">
+        <h1 id="site-title">Bienvenue sur Space-Y 🚀</h1>
+        <p>Un voyage à travers les étoiles et l’espace infini</p>
+    </main>
+
+    <!-- 🌟 Génération des étoiles optimisée -->
     <script>
-        const starsCount = 100;
-        for(let i = 0; i < starsCount; i++) {
-            let star = document.createElement('div');
-            star.classList.add('star');
-            star.style.top = Math.random() * window.innerHeight + 'px';
-            star.style.left = Math.random() * window.innerWidth + 'px';
-            star.style.width = Math.random() * 2 + 1 + 'px';
-            star.style.height = star.style.width;
-            star.style.animationDuration = (Math.random() * 3 + 1) + 's';
-            document.body.appendChild(star);
-        }
+        (function () {
+            const starsLayer = document.getElementById('stars-layer');
+            const STARS_COUNT = 140; // ajustez si nécessaire
+            const stars = [];
+
+            function createStar() {
+                const el = document.createElement('div');
+                el.className = 'star';
+                // taille entre 1px et 3px
+                const size = Math.floor(Math.random() * 3) + 1;
+                el.style.width = size + 'px';
+                el.style.height = size + 'px';
+
+                // durée et délai aléatoires pour la variation
+                el.style.animationDuration = (Math.random() * 3 + 1) + 's';
+                el.style.animationDelay = (Math.random() * 3) + 's';
+
+                // légère variation d'opacité initiale
+                el.style.opacity = (Math.random() * 0.6 + 0.2).toFixed(2);
+
+                // position initiale (utilise translate3d pour de meilleures performances)
+                const x = Math.random() * window.innerWidth;
+                const y = Math.random() * window.innerHeight;
+                el._x = x;
+                el._y = y;
+                el.style.transform = `translate3d(${x}px, ${y}px, 0)`;
+
+                return el;
+            }
+
+            function populateStars() {
+                // vider couche précédente si existante
+                starsLayer.innerHTML = '';
+                stars.length = 0;
+                for (let i = 0; i < STARS_COUNT; i++) {
+                    const s = createStar();
+                    stars.push(s);
+                    starsLayer.appendChild(s);
+                }
+            }
+
+            function repositionStarsOnResize() {
+                // repositionne les étoiles à l'intérieur de la nouvelle taille de fenêtre
+                for (let i = 0; i < stars.length; i++) {
+                    const s = stars[i];
+                    // recalculer une position proche de l'ancienne relative au nouveau viewport
+                    const x = Math.random() * window.innerWidth;
+                    const y = Math.random() * window.innerHeight;
+                    s._x = x;
+                    s._y = y;
+                    s.style.transform = `translate3d(${x}px, ${y}px, 0)`;
+                }
+            }
+
+            // initialisation
+            populateStars();
+
+            // repositionne doucement au redimensionnement (debounced)
+            let resizeTimer;
+            window.addEventListener('resize', function () {
+                clearTimeout(resizeTimer);
+                resizeTimer = setTimeout(repositionStarsOnResize, 150);
+            });
+
+            // Exposer pour debug si besoin
+            window.SpaceYStars = {
+                repopulate: populateStars,
+                starsCount: STARS_COUNT
+            };
+        })();
     </script>
 </body>
 </html>
